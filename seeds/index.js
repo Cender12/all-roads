@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const cities = require('./cities')
+const {places, descriptors} = require('./seedHelpers');
 const Road = require('../models/road');
 
 mongoose.connect('mongodb://localhost:27017/all-roads',{
@@ -14,16 +15,21 @@ db.once("open", () => {
     console.log("Database connected");
 });
 
+const sample = array => array[Math.floor(Math.random() * array.length)];
+
 
 const seedDB = async () => {
     await Road.deleteMany({});
     for(let i = 0; i < 50; i++){
-        const random10 = Math.floor(Math.random() * 10);
+        const random50 = Math.floor(Math.random() * 50);
         const newCity = new Road({
-            location: `${cities[random10].city}, ${cities[random10].state}`
+            location: `${cities[random50].city}, ${cities[random50].state}`,
+            title:    `${sample(descriptors)} ${sample(places)}`
         })
         await newCity.save();
     }
 };
 
-seedDB();
+seedDB().then(() => {
+    mongoose.connection.close();
+});

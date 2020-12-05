@@ -24,16 +24,10 @@ app.get('/', (req, res) => {
     res.render('home');
 })
 
-app.get('/makeroad', async (req, res) => {
-    const newRoad = new Road({title:'Barren Road', description: 'This windy road is a perfect route for a tour through beautiful Ridley Park!'});
-    await newRoad.save();
-    res.send(newRoad)
+app.get('/Roads', async (req, res) => {
+   const roadCollection = await Road.find({});
+   res.render('roads/index', { roadCollection })
 })
-
-
-
-
-
 
 
 
