@@ -20,24 +20,38 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 
+app.use(express.urlencoded({ extended: true }))
+
+
+//ROUTES
 app.get('/', (req, res) => {
     res.render('home');
-})
+});
 
 app.get('/Roads', async (req, res) => {
    const roadCollection = await Road.find({});
    res.render('roads/index', { roadCollection })
+});
+
+app.get('/Roads/new', (req, res) => {
+    res.render('roads/new')
+})
+
+app.post('/Roads', async(req, res) => {
+    const road = new Road (req.body.road);
+    await road.save();
+    res.redirect(`/Roads/${road._id}`)
 })
 
 app.get('/Roads/:id', async (req, res) => {
     const road = await Road.findById(req.params.id)
     res.render('roads/show', { road });
-})
+});
 
 
 
 
-
+//PORT LISTENER
 app.listen(3000, () =>{
     console.log('Serving on port 3000...');
 })

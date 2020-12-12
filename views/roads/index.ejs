@@ -7,6 +7,9 @@
 </head>
 <body>
     <h1>Road Collection</h1>
+    <div>
+        <a href="/Roads/new">Add Road</a>
+    </div>
     <ul>
         <% for (let road of roadCollection) {%>
             <li><a href="/Roads/<%= road._id %>"><%= road.title %></a></li>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Road</title>
+</head>
+<body>
+
+    <form action="/Roads" method="POST">
+        <div>
+            <label for="title">Title</label>
+            <input type="text" id="title" name="road[title]">
+        </div>
+        <div>
+            <label for="location">Location</label>
+            <input type="text" id="location" name="road[location]">
+        </div>
+        <button>Add Road</button>
+    </form>
+    <a href="/Roads">List of all roads</a>
+</body>
+</html>
