@@ -9,10 +9,9 @@
     <h1>Road Collection</h1>
     <ul>
         <% for (let road of roadCollection) {%>
-            <li><%= road.title %></li>
+            <li><a href="/Roads/<%= road._id %>"><%= road.title %></a></li>
         <% }%>
     </ul>
-
 
 </body>
 </html>

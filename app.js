@@ -29,6 +29,11 @@ app.get('/Roads', async (req, res) => {
    res.render('roads/index', { roadCollection })
 })
 
+app.get('/Roads/:id', async (req, res) => {
+    const road = await Road.findById(req.params.id)
+    res.render('roads/show', { road });
+})
+
 
 
 
@@ -36,5 +41,3 @@ app.get('/Roads', async (req, res) => {
 app.listen(3000, () =>{
     console.log('Serving on port 3000...');
 })
-
-//ex
