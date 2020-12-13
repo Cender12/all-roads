@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
+const methodOverride = require('method-override');
 const Road = require('./models/road');
 
 mongoose.connect('mongodb://localhost:27017/all-roads',{
@@ -21,7 +22,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 
 app.use(express.urlencoded({ extended: true }))
-
+app.use(methodOverride('_method'))
 
 //ROUTES
 app.get('/', (req, res) => {
@@ -48,6 +49,16 @@ app.get('/Roads/:id', async (req, res) => {
     res.render('roads/show', { road });
 });
 
+app.get('/Roads/:id/edit', async(req, res) => {
+    const road = await Road.findById(req.params.id)
+    res.render('roads/edit', { road });
+})
+
+app.put('/Roads/:id', async (req, res) => {
+    const { id } = req.params;
+    const road = await Road.findByIdAndUpdate(id, { ...req.body.road })
+    res.redirect(`/Roads/${road._id}`)
+})
 
 
 
