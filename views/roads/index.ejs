@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roads</title>
-</head>
-<body>
+<% layout('layouts/boilerplate')%>
     <h1>Road Collection</h1>
     <div>
         <a href="/Roads/new">Add Road</a>
@@ -15,6 +8,3 @@
             <li><a href="/Roads/<%= road._id %>"><%= road.title %></a></li>
         <% }%>
     </ul>
-
-</body>
-</html>

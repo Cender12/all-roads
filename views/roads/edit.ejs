@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Road</title>
-</head>
-<body>
-
+<% layout('layouts/boilerplate')%>
     <h1>Edit Road</h1>
     <form action="/Roads/<%=road._id%>?_method=PUT" method="POST">
         <div>
@@ -20,5 +12,3 @@
         <button>Update Road</button>
     </form>
     <a href="/Roads/<%= road._id%>">Back to Road</a>
-</body>
-</html>
