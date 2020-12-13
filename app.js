@@ -60,6 +60,12 @@ app.put('/Roads/:id', async (req, res) => {
     res.redirect(`/Roads/${road._id}`)
 })
 
+app.delete('/Roads/:id', async (req, res) => {
+    const { id } = req.params;
+    await Road.findByIdAndDelete(id);
+    res.redirect('/Roads');
+})
+
 
 
 //PORT LISTENER
