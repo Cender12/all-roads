@@ -1,13 +1,46 @@
 <% layout('layouts/boilerplate')%>
-    <form action="/Roads" method="POST">
-        <div>
-            <label for="title">Title</label>
-            <input type="text" id="title" name="road[title]">
+    <div class="row">
+        <h1 class="text-center">New Road</h1>
+        <div class="col-6 offset-3">
+            <form action="/Roads" method="POST">
+
+                <!-- input title -->
+                <div class="mb-3">
+                    <label class="form-label" for="title">Title</label>
+                    <input class="form-control" type="text" id="title" name="road[title]">
+                </div>
+                
+                <!-- input location -->
+                <div class="mb-3">
+                    <label class="form-label" for="location">Location</label>
+                    <input class="form-control" type="text" id="location" name="road[location]">
+                </div>
+
+                <!-- input image url -->
+                <div class="mb-3">
+                    <label class="form-label" for="image">Image Url</label>
+                    <input class="form-control" type="text" id="image" name="road[image]">
+                </div>
+
+                <!-- input rating -->
+                <div class="mb-3">
+                    <label class="form-label" for="rating">Road Rating</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="rating-label"><i class="fas fa-star"></i></span>
+                        <input type="text" class="form-control" id="rating" placeholder="0-5" aria-label="Rating" aria-describedby="rating-label" name="road[rating]">
+                    </div>
+                </div>
+
+                <!-- input description -->
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" type="text" id="description" name="road[description]"></textarea>
+                </div>
+
+                <div class="mb-3">
+                   <button class="btn btn-success">Add Road</button>
+                </div>
+            </form>
+            <a href="/Roads">List of all roads</a>
         </div>
-        <div>
-            <label for="location">Location</label>
-            <input type="text" id="location" name="road[location]">
-        </div>
-        <button>Add Road</button>
-    </form>
-    <a href="/Roads">List of all roads</a>
+    </div>

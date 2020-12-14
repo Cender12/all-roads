@@ -1,14 +1,48 @@
 <% layout('layouts/boilerplate')%>
-    <h1>Edit Road</h1>
-    <form action="/Roads/<%=road._id%>?_method=PUT" method="POST">
-        <div>
-            <label for="title">Title</label>
-            <input type="text" id="title" name="road[title]" value="<%=road.title%>">
+   
+     <div class="row">
+        <h1 class="text-center">Edit Road</h1>
+        <div class="col-6 offset-3">
+            <form action="/Roads/<%=road._id%>?_method=PUT" method="POST">
+
+                <!-- input title -->
+                <div class="mb-3">
+                    <label class="form-label" for="title">Title</label>
+                    <input class="form-control" type="text" id="title" name="road[title]" value="<%=road.title%>">
+                </div>
+                
+                <!-- input location -->
+                <div class="mb-3">
+                    <label class="form-label" for="location">Location</label>
+                    <input class="form-control" type="text" id="location" name="road[location]" value="<%=road.location%>">
+                </div>
+
+                <!-- input image url -->
+                <div class="mb-3">
+                    <label class="form-label" for="image">Image Url</label>
+                    <input class="form-control" type="text" id="image" name="road[image]" value="<%=road.image%>">
+                </div>
+
+                <!-- input rating -->
+                <div class="mb-3">
+                    <label class="form-label" for="rating">Road Rating</label>
+                    <div class="input-group">
+                        <span class="input-group-text" id="rating-label"><i class="fas fa-star"></i></span>
+                        <input type="text" class="form-control" id="rating" placeholder="0-5" aria-label="Rating" aria-describedby="rating-label" name="road[rating]" 
+                            value="<%= road.rating %>">
+                    </div>
+                </div>
+
+                <!-- input description -->
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" type="text" id="description" name="road[description]"><%= road.description %></textarea>
+                </div>
+
+                <div class="mb-3">
+                   <button class="btn btn-info">Update Road</button>
+                </div>
+            </form>
+            <a href="/Roads/<%= road._id%>">Back to Road</a>
         </div>
-        <div>
-            <label for="location">Location</label>
-            <input type="text" id="location" name="road[location]" value="<%=road.location%>">
-        </div>
-        <button>Update Road</button>
-    </form>
-    <a href="/Roads/<%= road._id%>">Back to Road</a>
+    </div>
