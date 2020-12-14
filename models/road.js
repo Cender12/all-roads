@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 
 const RoadSchema = new Schema({
     title: String,
-    rating: String,
+    image: String,
+    rating: Number,
     description: String,
     location: String
 });

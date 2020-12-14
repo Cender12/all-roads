@@ -1,6 +1,8 @@
 <% layout('layouts/boilerplate')%>
     <h1><%= road.title %></h1>
     <h2><%= road.location %></h2>
+    <img src="<%= road.image %>" alt="">
+    <p> <%= road.description %> </p>
 
     <p>       
         <a href="/Roads/<%=road._id%>/edit">Edit</a>
