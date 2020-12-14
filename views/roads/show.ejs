@@ -1,18 +1,28 @@
 <% layout('layouts/boilerplate')%>
-    <h1><%= road.title %></h1>
-    <h2><%= road.location %></h2>
-    <img src="<%= road.image %>" alt="">
-    <p> <%= road.description %> </p>
 
-    <p>       
-        <a href="/Roads/<%=road._id%>/edit">Edit</a>
-    </p>
+<div class="row">
+    <div class="col-6 offset-3">
+        <div class="card mb-3">
+            <img src="<%= road.image %>" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title"><%= road.title %></h5>
+              <p class="card-text"><%= road.description %></p>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item text-muted"><%= road.location %></li>
+              <li class="list-group-item"><i class="fas fa-star" style="padding-right: 8px"></i><%= road.rating %>/5</li>
+            </ul>
+            <div class="card-body">
+                <a class="card-link btn btn-info" href="/Roads/<%=road._id%>/edit">Edit</a>
+                <form class="d-inline" action="/Roads/<%=road._id%>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+            <div class="card-footer text-muted">
+                    3 days ago
+            </div>
+          </div>
+    </div>
+</div>
 
-    <p>
-        <form action="/Roads/<%=road._id%>?_method=DELETE" method="POST">
-        <button>Delete</button>
-    </form>
-    </p>
-    <footer>
-        <a href="/Roads">List of all roads</a>
-    </footer>
+   

@@ -22,7 +22,7 @@ const seedDB = async () => {
     await Road.deleteMany({});
     for(let i = 0; i < 50; i++){
         const random50 = Math.floor(Math.random() * 50);
-        const rating = Math.floor(Math.random() * 5) + 2;
+        const rating = Math.floor(Math.random() * 50)/10;
         const newCity = new Road({
             location:       `${cities[random50].city}, ${cities[random50].state}`,
             title:          `${sample(descriptors)} ${sample(places)}`,
