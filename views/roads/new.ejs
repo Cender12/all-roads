@@ -2,24 +2,33 @@
     <div class="row">
         <h1 class="text-center">New Road</h1>
         <div class="col-6 offset-3">
-            <form action="/Roads" method="POST">
+            <form action="/Roads" method="POST" novalidate class="validated-form">
 
                 <!-- input title -->
                 <div class="mb-3">
                     <label class="form-label" for="title">Title</label>
-                    <input class="form-control" type="text" id="title" name="road[title]">
+                    <input class="form-control" type="text" id="title" name="road[title]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 
                 <!-- input location -->
                 <div class="mb-3">
                     <label class="form-label" for="location">Location</label>
-                    <input class="form-control" type="text" id="location" name="road[location]">
+                    <input class="form-control" type="text" id="location" name="road[location]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
 
                 <!-- input image url -->
                 <div class="mb-3">
                     <label class="form-label" for="image">Image Url</label>
-                    <input class="form-control" type="text" id="image" name="road[image]">
+                    <input class="form-control" type="text" id="image" name="road[image]" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
 
                 <!-- input rating -->
@@ -27,14 +36,20 @@
                     <label class="form-label" for="rating">Road Rating</label>
                     <div class="input-group">
                         <span class="input-group-text" id="rating-label"><i class="fas fa-star"></i></span>
-                        <input type="text" class="form-control" id="rating" placeholder="0-5" aria-label="Rating" aria-describedby="rating-label" name="road[rating]">
+                        <input type="text" class="form-control" id="rating" placeholder="0-5" aria-label="Rating" aria-describedby="rating-label" name="road[rating]" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
                     </div>
                 </div>
 
                 <!-- input description -->
                 <div class="mb-3">
                     <label class="form-label" for="description">Description</label>
-                    <textarea class="form-control" type="text" id="description" name="road[description]"></textarea>
+                    <textarea class="form-control" type="text" id="description" name="road[description]" required></textarea>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
 
                 <div class="mb-3">

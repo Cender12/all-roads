@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate')
+const catchAsync = require('./utilities/catchAsync');
 const methodOverride = require('method-override');
 const Road = require('./models/road');
 
@@ -32,46 +33,50 @@ app.get('/', (req, res) => {
     res.render('home');
 });
 
-app.get('/Roads', async (req, res) => {
+app.get('/Roads', catchAsync(async (req, res) => {
    const roadCollection = await Road.find({});
    res.render('roads/index', { roadCollection })
-});
+}));
 
 app.get('/Roads/new', (req, res) => {
     res.render('roads/new')
-})
-
-app.post('/Roads', async(req, res) => {
-    const road = new Road (req.body.road);
-    await road.save();
-    res.redirect(`/Roads/${road._id}`)
-})
-
-app.get('/Roads/:id', async (req, res) => {
-    const road = await Road.findById(req.params.id)
-    res.render('roads/show', { road });
 });
 
-app.get('/Roads/:id/edit', async(req, res) => {
+app.post('/Roads', catchAsync(async(req, res, next) => {
+        const road = new Road (req.body.road);
+        await road.save();
+        res.redirect(`/Roads/${road._id}`) 
+}));
+
+app.get('/Roads/:id', catchAsync(async (req, res) => {
+    const road = await Road.findById(req.params.id)
+    res.render('roads/show', { road });
+}));
+
+app.get('/Roads/:id/edit', catchAsync(async(req, res) => {
     const road = await Road.findById(req.params.id)
     res.render('roads/edit', { road });
-})
+}));
 
-app.put('/Roads/:id', async (req, res) => {
+app.put('/Roads/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     const road = await Road.findByIdAndUpdate(id, { ...req.body.road })
     res.redirect(`/Roads/${road._id}`)
-})
+}));
 
-app.delete('/Roads/:id', async (req, res) => {
+app.delete('/Roads/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     await Road.findByIdAndDelete(id);
     res.redirect('/Roads');
-})
+}));
 
+// ERROR HANDLER===========================================================================
+app.use((err, req, res, next) => {
+    res.send('Oh boy, something went terribly wrong!')
+});
 
 
 //PORT LISTENER============================================================================
 app.listen(3000, () =>{
     console.log('Serving on port 3000...');
-})
+});

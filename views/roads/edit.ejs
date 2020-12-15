@@ -3,24 +3,33 @@
      <div class="row">
         <h1 class="text-center">Edit Road</h1>
         <div class="col-6 offset-3">
-            <form action="/Roads/<%=road._id%>?_method=PUT" method="POST">
+            <form action="/Roads/<%=road._id%>?_method=PUT" method="POST" novalidate class="validated-form" required>
 
                 <!-- input title -->
                 <div class="mb-3">
                     <label class="form-label" for="title">Title</label>
-                    <input class="form-control" type="text" id="title" name="road[title]" value="<%=road.title%>">
+                    <input class="form-control" type="text" id="title" name="road[title]" value="<%=road.title%>" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
                 
                 <!-- input location -->
                 <div class="mb-3">
                     <label class="form-label" for="location">Location</label>
-                    <input class="form-control" type="text" id="location" name="road[location]" value="<%=road.location%>">
+                    <input class="form-control" type="text" id="location" name="road[location]" value="<%=road.location%>" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
 
                 <!-- input image url -->
                 <div class="mb-3">
                     <label class="form-label" for="image">Image Url</label>
-                    <input class="form-control" type="text" id="image" name="road[image]" value="<%=road.image%>">
+                    <input class="form-control" type="text" id="image" name="road[image]" value="<%=road.image%>" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
 
                 <!-- input rating -->
@@ -29,14 +38,20 @@
                     <div class="input-group">
                         <span class="input-group-text" id="rating-label"><i class="fas fa-star"></i></span>
                         <input type="text" class="form-control" id="rating" placeholder="0-5" aria-label="Rating" aria-describedby="rating-label" name="road[rating]" 
-                            value="<%= road.rating %>">
+                            value="<%= road.rating %>" required>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
                     </div>
                 </div>
 
                 <!-- input description -->
                 <div class="mb-3">
                     <label class="form-label" for="description">Description</label>
-                    <textarea class="form-control" type="text" id="description" name="road[description]"><%= road.description %></textarea>
+                    <textarea class="form-control" type="text" id="description" name="road[description]" required><%= road.description %></textarea>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
                 </div>
 
                 <div class="mb-3">
