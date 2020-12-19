@@ -3,6 +3,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate')
 const catchAsync = require('./utilities/catchAsync');
+const ExpressError = require('./utilities/ExpressError');
 const methodOverride = require('method-override');
 const Road = require('./models/road');
 
@@ -43,6 +44,7 @@ app.get('/Roads/new', (req, res) => {
 });
 
 app.post('/Roads', catchAsync(async(req, res, next) => {
+        if(!req.body.road) throw new ExpressError('Invalid Road Data', 400);
         const road = new Road (req.body.road);
         await road.save();
         res.redirect(`/Roads/${road._id}`) 
@@ -70,9 +72,14 @@ app.delete('/Roads/:id', catchAsync(async (req, res) => {
     res.redirect('/Roads');
 }));
 
+app.all('*', (req, res, next) => {
+    next(new ExpressError('Page Not Found'), 404)
+})
+
 // ERROR HANDLER===========================================================================
 app.use((err, req, res, next) => {
-    res.send('Oh boy, something went terribly wrong!')
+    const { statusCode = 500, message = 'Something went wrong' } = err;
+    res.status(statusCode).send(message)
 });
 
 
