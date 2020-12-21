@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
-const ejsMate = require('ejs-mate')
+const ejsMate = require('ejs-mate');
+const Joi = require('joi');
 const catchAsync = require('./utilities/catchAsync');
 const ExpressError = require('./utilities/ExpressError');
 const methodOverride = require('method-override');
@@ -44,7 +45,22 @@ app.get('/Roads/new', (req, res) => {
 });
 
 app.post('/Roads', catchAsync(async(req, res, next) => {
-        if(!req.body.road) throw new ExpressError('Invalid Road Data', 400);
+        // if(!req.body.road) throw new ExpressError('Invalid Road Data', 400);
+        const RoadSchema = Joi.object({
+            road: Joi.object({
+                title: Joi.string().required(),
+                rating: Joi.number().required().min(0),
+                image: Joi.string().required(),
+                location: Joi.string().required(),
+                description: Joi.string().required()
+            }).required()
+        })
+        const { error } = RoadSchema.validate(req.body);
+        if(error){
+            const msg = error.details.map(el => el.message).join(',')
+            throw new ExpressError(msg, 400)
+        }
+        console.log(result);
         const road = new Road (req.body.road);
         await road.save();
         res.redirect(`/Roads/${road._id}`) 
