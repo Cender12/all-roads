@@ -29,6 +29,25 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 
+const validateRoad = (req, res, next) => {
+    const RoadSchema = Joi.object({
+        road: Joi.object({
+            title: Joi.string().required(),
+            rating: Joi.number().required().min(0),
+            image: Joi.string().required(),
+            location: Joi.string().required(),
+            description: Joi.string().required()
+        }).required()
+    })
+    const { error } = RoadSchema.validate(req.body);
+    if(error){
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
 
 //ROUTES===================================================================================
 app.get('/', (req, res) => {
@@ -44,23 +63,8 @@ app.get('/Roads/new', (req, res) => {
     res.render('roads/new')
 });
 
-app.post('/Roads', catchAsync(async(req, res, next) => {
+app.post('/Roads', validateRoad, catchAsync(async(req, res, next) => {
         // if(!req.body.road) throw new ExpressError('Invalid Road Data', 400);
-        const RoadSchema = Joi.object({
-            road: Joi.object({
-                title: Joi.string().required(),
-                rating: Joi.number().required().min(0),
-                image: Joi.string().required(),
-                location: Joi.string().required(),
-                description: Joi.string().required()
-            }).required()
-        })
-        const { error } = RoadSchema.validate(req.body);
-        if(error){
-            const msg = error.details.map(el => el.message).join(',')
-            throw new ExpressError(msg, 400)
-        }
-        console.log(result);
         const road = new Road (req.body.road);
         await road.save();
         res.redirect(`/Roads/${road._id}`) 
