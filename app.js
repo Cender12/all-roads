@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
-const Joi = require('joi');
+const {RoadSchema} = require('./schemas.js');
 const catchAsync = require('./utilities/catchAsync');
 const ExpressError = require('./utilities/ExpressError');
 const methodOverride = require('method-override');
@@ -30,15 +30,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 
 const validateRoad = (req, res, next) => {
-    const RoadSchema = Joi.object({
-        road: Joi.object({
-            title: Joi.string().required(),
-            rating: Joi.number().required().min(0),
-            image: Joi.string().required(),
-            location: Joi.string().required(),
-            description: Joi.string().required()
-        }).required()
-    })
     const { error } = RoadSchema.validate(req.body);
     if(error){
         const msg = error.details.map(el => el.message).join(',')
@@ -80,7 +71,7 @@ app.get('/Roads/:id/edit', catchAsync(async(req, res) => {
     res.render('roads/edit', { road });
 }));
 
-app.put('/Roads/:id', catchAsync(async (req, res) => {
+app.put('/Roads/:id', validateRoad, catchAsync(async (req, res) => {
     const { id } = req.params;
     const road = await Road.findByIdAndUpdate(id, { ...req.body.road })
     res.redirect(`/Roads/${road._id}`)
