@@ -7,7 +7,13 @@ const RoadSchema = new Schema({
     image: String,
     rating: Number,
     description: String,
-    location: String
+    location: String,
+    reviews: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Review'
+        }
+    ]
 });
 
 module.exports = mongoose.model('Road', RoadSchema);
