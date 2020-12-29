@@ -7,6 +7,8 @@ const catchAsync = require('./utilities/catchAsync');
 const ExpressError = require('./utilities/ExpressError');
 const methodOverride = require('method-override');
 const Road = require('./models/road');
+// const road = require('./models/road');
+const Review = require('./models/review');
 
 mongoose.connect('mongodb://localhost:27017/all-roads',{
     useNewUrlParser:true,
@@ -66,7 +68,7 @@ app.get('/Roads/:id', catchAsync(async (req, res) => {
     res.render('roads/show', { road });
 }));
 
-app.get('/Roads/:id/edit', catchAsync(async(req, res) => {
+app.get('/Roads/:id/edit', catchAsync(async (req, res) => {
     const road = await Road.findById(req.params.id)
     res.render('roads/edit', { road });
 }));
@@ -83,6 +85,16 @@ app.delete('/Roads/:id', catchAsync(async (req, res) => {
     res.redirect('/Roads');
 }));
 
+app.post('/Roads/:id/reviews', catchAsync(async (req, res) => {
+    res.send('You made it safely!')
+    // const road = await Road.findById(req.params.id);
+    // const review = new Review(req.body.review);
+    // road.reviews.push(review);
+    // await review.save();
+    // await road.save();
+    // res.redirect(`/Roads/${road._id}`);
+}));
+
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found'), 404)
 })
@@ -96,6 +108,6 @@ app.use((err, req, res, next) => {
 
 
 //PORT LISTENER============================================================================
-app.listen(3000, () =>{
-    console.log('Serving on port 3000...');
+app.listen(3000, () => {
+    console.log('Serving on port 3000...')
 });
