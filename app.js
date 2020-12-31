@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
-const {RoadSchema} = require('./schemas.js');
+const { RoadSchema, reviewSchema } = require('./schemas.js');
 const catchAsync = require('./utilities/catchAsync');
 const ExpressError = require('./utilities/ExpressError');
 const methodOverride = require('method-override');
@@ -31,6 +31,7 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 
+// MIDDLEWARE==============================================================================
 const validateRoad = (req, res, next) => {
     const { error } = RoadSchema.validate(req.body);
     if(error){
@@ -41,6 +42,16 @@ const validateRoad = (req, res, next) => {
     }
 }
 
+const validateReview = (req, res, next) => {
+    const {error} = reviewSchema.validate(req.body);
+    console.log(error)
+    if(error){
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
 
 //ROUTES===================================================================================
 app.get('/', (req, res) => {
@@ -64,7 +75,7 @@ app.post('/Roads', validateRoad, catchAsync(async(req, res, next) => {
 }));
 
 app.get('/Roads/:id', catchAsync(async (req, res) => {
-    const road = await Road.findById(req.params.id)
+    const road = await (await Road.findById(req.params.id)).populate('reviews');
     res.render('roads/show', { road });
 }));
 
@@ -85,14 +96,13 @@ app.delete('/Roads/:id', catchAsync(async (req, res) => {
     res.redirect('/Roads');
 }));
 
-app.post('/Roads/:id/reviews', catchAsync(async (req, res) => {
-    res.send('You made it safely!')
-    // const road = await Road.findById(req.params.id);
-    // const review = new Review(req.body.review);
-    // road.reviews.push(review);
-    // await review.save();
-    // await road.save();
-    // res.redirect(`/Roads/${road._id}`);
+app.post('/Roads/:id/reviews', validateReview, catchAsync(async (req, res) => {
+    const road = await Road.findById(req.params.id);
+    const review = new Review(req.body.review);
+    road.reviews.push(review);
+    await review.save();
+    await road.save();
+    res.redirect(`/Roads/${road._id}`);
 }));
 
 app.all('*', (req, res, next) => {

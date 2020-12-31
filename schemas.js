@@ -1,3 +1,4 @@
+const { number } = require('joi');
 const Joi = require('joi');
 
 module.exports.RoadSchema = Joi.object({
@@ -9,3 +10,10 @@ module.exports.RoadSchema = Joi.object({
         description: Joi.string().required()
     }).required()
 });
+
+module.exports.reviewSchema = Joi.object({
+    review: Joi.object({
+        body: Joi.string().required()
+    }).required()
+});
+
