@@ -30,6 +30,7 @@ router.post('/', validateRoad, catchAsync(async(req, res, next) => {
         // if(!req.body.road) throw new ExpressError('Invalid Road Data', 400);
         const road = new Road (req.body.road);
         await road.save();
+        req.flash('success', 'Successfully made a new road');
         res.redirect(`/Roads/${road._id}`) 
 }));
 

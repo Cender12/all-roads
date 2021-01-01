@@ -1,22 +1,26 @@
+//REQUIRES===================================================================
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
+const session = require('express-session');
+const flash = require('connect-flash');
 const { RoadSchema, reviewSchema } = require('./schemas.js');
-const catchAsync = require('./utilities/catchAsync');
 const ExpressError = require('./utilities/ExpressError');
 const methodOverride = require('method-override');
 const Road = require('./models/road');
-// const road = require('./models/road');
 const Review = require('./models/review');
 
+//requires road and review routes
 const roads = require('./routes/roads');
+const reviews = require('./routes/reviews');
 
-
+//MONGOOSE=================================================================
 mongoose.connect('mongodb://localhost:27017/all-roads',{
     useNewUrlParser:true,
     useCreateIndex: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 });
 
 const db = mongoose.connection;
@@ -33,38 +37,40 @@ app.set('views', path.join(__dirname, 'views'))
 
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
+app.use(express.static(path.join(__dirname, 'public')))
 
-// MIDDLEWARE==============================================================================
-
-
-const validateReview = (req, res, next) => {
-    const {error} = reviewSchema.validate(req.body);
-    console.log(error)
-    if(error){
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
+//REMOVES DEPRICATION AND SPECIFIES COOKIE SETTINGS
+const sessionConfig = {
+    secret: 'thisshouldbeabettersecret!',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        //ms to s to mins to hrs to days 
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
     }
 }
 
+app.use(session(sessionConfig))
+app.use(flash());
 
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
+    next();
+})
+
+
+
+//  ROUTE HANDLERS========================================================================
 app.use('/Roads', roads)
+app.use('/Roads/:id/reviews', reviews)
 
-app.post('/Roads/:id/reviews', validateReview, catchAsync(async (req, res) => {
-    const road = await Road.findById(req.params.id);
-    const review = new Review(req.body.review);
-    road.reviews.push(review);
-    await review.save();
-    await road.save();
-    res.redirect(`/Roads/${road._id}`);
-}));
-
+// ERROR HANDLERS===========================================================================
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found'), 404)
 })
 
-// ERROR HANDLER===========================================================================
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
     if (!err.message) err.message = 'Oh No, Something Went Wrong!'
