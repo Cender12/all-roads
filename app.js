@@ -1,4 +1,4 @@
-//REQUIRES===================================================================
+// REQUIRES===================================================================
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -10,12 +10,16 @@ const ExpressError = require('./utilities/ExpressError');
 const methodOverride = require('method-override');
 const Road = require('./models/road');
 const Review = require('./models/review');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 
 //requires road and review routes
-const roads = require('./routes/roads');
-const reviews = require('./routes/reviews');
+const userRoutes = require('./routes/users');
+const roadRoutes = require('./routes/roads');
+const reviewRoutes = require('./routes/reviews');
 
-//MONGOOSE=================================================================
+// MONGOOSE=================================================================
 mongoose.connect('mongodb://localhost:27017/all-roads',{
     useNewUrlParser:true,
     useCreateIndex: true,
@@ -39,7 +43,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 app.use(express.static(path.join(__dirname, 'public')))
 
-//REMOVES DEPRICATION AND SPECIFIES COOKIE SETTINGS
+// REMOVES DEPRICATION AND SPECIFIES COOKIE SETTINGS======================================
 const sessionConfig = {
     secret: 'thisshouldbeabettersecret!',
     resave: false,
@@ -52,8 +56,19 @@ const sessionConfig = {
     }
 }
 
+
+// FLASH==================================================================================
 app.use(session(sessionConfig))
 app.use(flash());
+
+// PASSPORT AUTHENTICATION=================================================================
+//make sure session comes before(above)
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
@@ -61,13 +76,19 @@ app.use((req, res, next) => {
     next();
 })
 
-
+app.get('/fakeUser', async (req, res) => {
+    const user = new User({email: 'chris@gmail.com', username: 'Chrisss'});
+    const newUser = await User.register(user, 'Ender');
+    res.send(newUser);
+})
 
 //  ROUTE HANDLERS========================================================================
-app.use('/Roads', roads)
-app.use('/Roads/:id/reviews', reviews)
+app.use('/', userRoutes);
+app.use('/Roads', roadRoutes);
+app.use('/Roads/:id/reviews', reviewRoutes);
 
-// ERROR HANDLERS===========================================================================
+
+// ERROR HANDLERS=========================================================================
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found'), 404)
 })
@@ -79,7 +100,7 @@ app.use((err, req, res, next) => {
 });
 
 
-//PORT LISTENER============================================================================
+// PORT LISTENER============================================================================
 app.listen(3000, () => {
     console.log('Serving on port 3000...')
 });

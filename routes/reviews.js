@@ -34,6 +34,7 @@ router.post('/', validateReview, catchAsync(async (req, res) => {
 //     const { id, reviewId } = req.params;
 //     await Road.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
 //     await Review.findByIdAndDelete(reviewId);
+//     req.flash('success', Review Deleted');
 //     res.redirect(`/Roads/${id}');
 // }))
 

@@ -35,12 +35,20 @@ router.post('/', validateRoad, catchAsync(async(req, res, next) => {
 }));
 
 router.get('/:id', catchAsync(async (req, res) => {
-    const road = await (await Road.findById(req.params.id)).populate('reviews');
+    const road = (await Road.findById(req.params.id)).populate('reviews');
+    if(!road){
+        req.flash('error', 'Cannot find that road!');
+        return res.redirect('/Roads');
+    }
     res.render('roads/show', { road });
 }));
 
 router.get('/:id/edit', catchAsync(async (req, res) => {
-    const road = await Road.findById(req.params.id)
+    const road = await Road.findById(req.params.id);
+    if(!road){
+        req.flash('error', 'Cannot find that road!');
+        return res.redirect('/Roads');
+    }
     res.render('roads/edit', { road });
 }));
 
@@ -54,7 +62,7 @@ router.put('/:id', validateRoad, catchAsync(async (req, res) => {
 router.delete('/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     await Road.findByIdAndDelete(id);
-    req.flash('success', 'Deleted the road');
+    req.flash('success', 'Road Deleted');
     res.redirect('/Roads');
 }));
 
