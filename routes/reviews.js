@@ -26,6 +26,7 @@ router.post('/', validateReview, catchAsync(async (req, res) => {
     road.reviews.push(review);
     await review.save();
     await road.save();
+    req.flash('success', 'Created new review');
     res.redirect(`/Roads/${road._id}`);
 }));
 

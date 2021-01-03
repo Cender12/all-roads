@@ -46,13 +46,15 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
 
 router.put('/:id', validateRoad, catchAsync(async (req, res) => {
     const { id } = req.params;
-    const road = await Road.findByIdAndUpdate(id, { ...req.body.road })
-    res.redirect(`/Roads/${road._id}`)
+    const road = await Road.findByIdAndUpdate(id, { ...req.body.road });
+    req.flash('success','Successfully updated road!');
+    res.redirect(`/Roads/${road._id}`);
 }));
 
 router.delete('/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     await Road.findByIdAndDelete(id);
+    req.flash('success', 'Deleted the road');
     res.redirect('/Roads');
 }));
 
