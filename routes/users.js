@@ -5,7 +5,7 @@ const catchAsync = require('../utilities/catchAsync');
 const User = require('../models/user');
 
 router.get('/register', (req, res) => {
-    res.render('users/register')
+    res.render('users/register');
 })
 
 router.post('/register', catchAsync(async (req, res) => {
@@ -22,12 +22,19 @@ router.post('/register', catchAsync(async (req, res) => {
 }));
 
 router.get('/login', (req, res) => {
-    res.render('users/login')
+    res.render('users/login');
 })
 
 router.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res) => {
-    req.flash('success', 'welcome back!');
-    res.redirect('/Roads')
+    req.flash('success', 'Welcome back!');
+    res.redirect('/Roads');
 })
+
+router.get('/logout', (req, res) => {
+    req.logout();
+    req.flash('success', "Successfully signed out")
+    res.redirect('/Roads');
+})
+
 
 module.exports = router;
