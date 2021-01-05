@@ -31,13 +31,15 @@ router.get('/new', isLoggedIn, (req, res) => {
 router.post('/', isLoggedIn, validateRoad, catchAsync(async(req, res, next) => {
         // if(!req.body.road) throw new ExpressError('Invalid Road Data', 400);
         const road = new Road (req.body.road);
+        road.author = req.user._id;
         await road.save();
         req.flash('success', 'Successfully made a new road');
         res.redirect(`/Roads/${road._id}`) 
 }));
 
 router.get('/:id', catchAsync(async (req, res) => {
-    const road = (await Road.findById(req.params.id)).populate('reviews');
+    const road = await Road.findById(req.params.id).populate('reviews').populate('author');
+    console.log(road);
     if(!road){
         req.flash('error', 'Cannot find that road!');
         return res.redirect('/Roads');

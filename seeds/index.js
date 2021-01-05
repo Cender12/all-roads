@@ -24,6 +24,7 @@ const seedDB = async () => {
         const random50 = Math.floor(Math.random() * 50);
         const rating = Math.floor(Math.random() * 50)/10;
         const newCity = new Road({
+            author: '5ff3c754585f7303e7067bed',
             location:       `${cities[random50].city}, ${cities[random50].state}`,
             title:          `${sample(descriptors)} ${sample(places)}`,
             image:          'https://source.unsplash.com/collection/455939/1200x800',
