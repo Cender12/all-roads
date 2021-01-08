@@ -48,17 +48,27 @@ router.get('/:id', catchAsync(async (req, res) => {
 }));
 
 router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
-    const road = await Road.findById(req.params.id);
+    const { id } = req.params;
+    const road = await Road.findById(id);
     if(!road){
         req.flash('error', 'Cannot find that road!');
         return res.redirect('/Roads');
+    }
+    if (!road.author.equals(req.user._id)) {
+        req.flash('error', 'You do not have permission to do that!');
+        return res.redirect(`/Roads/${id}`);
     }
     res.render('roads/edit', { road });
 }));
 
 router.put('/:id', isLoggedIn, validateRoad, catchAsync(async (req, res) => {
     const { id } = req.params;
-    const road = await Road.findByIdAndUpdate(id, { ...req.body.road });
+    const road = await Road.findById(id);
+    if (!road.author.equals(req.user._id)) {
+        req.flash('error', 'You do not have permission to do that!');
+        return res.redirect(`/Roads/${id}`);
+    }
+    const rd = await Road.findByIdAndUpdate(id, { ...req.body.road });
     req.flash('success','Successfully updated road!');
     res.redirect(`/Roads/${road._id}`);
 }));
