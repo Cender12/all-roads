@@ -1,22 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utilities/catchAsync');
-const { RoadSchema } = require('../schemas.js');
-const {isLoggedIn } = require('../middleware');
-
-const ExpressError = require('../utilities/ExpressError');
+const {isLoggedIn, validateRoad, isAuthor} = require('../middleware');
 const Road = require('../models/road');
 
-//MIDDLEWARE===============================================================
-const validateRoad = (req, res, next) => {
-    const { error } = RoadSchema.validate(req.body);
-    if(error){
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
+
+
 
 //ROUTES===============================================================
 router.get('/', catchAsync(async (req, res) => {
@@ -47,33 +36,25 @@ router.get('/:id', catchAsync(async (req, res) => {
     res.render('roads/show', { road });
 }));
 
-router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
     const { id } = req.params;
     const road = await Road.findById(id);
     if(!road){
         req.flash('error', 'Cannot find that road!');
         return res.redirect('/Roads');
     }
-    if (!road.author.equals(req.user._id)) {
-        req.flash('error', 'You do not have permission to do that!');
-        return res.redirect(`/Roads/${id}`);
-    }
     res.render('roads/edit', { road });
 }));
 
-router.put('/:id', isLoggedIn, validateRoad, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn, isAuthor, validateRoad, catchAsync(async (req, res) => {
     const { id } = req.params;
-    const road = await Road.findById(id);
-    if (!road.author.equals(req.user._id)) {
-        req.flash('error', 'You do not have permission to do that!');
-        return res.redirect(`/Roads/${id}`);
-    }
-    const rd = await Road.findByIdAndUpdate(id, { ...req.body.road });
+    
+    const road = await Road.findByIdAndUpdate(id, { ...req.body.road });
     req.flash('success','Successfully updated road!');
     res.redirect(`/Roads/${road._id}`);
 }));
 
-router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
     const { id } = req.params;
     await Road.findByIdAndDelete(id);
     req.flash('success', 'Road Deleted');
