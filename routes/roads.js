@@ -8,18 +8,22 @@ const Road = require('../models/road');
 
 
 //ROUTES===============================================================
-router.get('/', catchAsync(roads.index)); //roads.index function is now located in ../controllers/roads.js
+
+router.route('/')
+    .get(catchAsync(roads.index)) //roads.index function is now located in ../controllers/roads.js
+    .post(isLoggedIn, validateRoad, catchAsync(roads.createRoad));
 
 router.get('/new', isLoggedIn, roads.renderNewForm); //roads.renderNewForm function is now located in ../controllers/roads.js
 
-router.post('/', isLoggedIn, validateRoad, catchAsync(roads.createRoad));
 
-router.get('/:id', catchAsync(roads.showRoad));
+router.route('/:id')
+    .get(catchAsync(roads.showRoad))
+    .put(isLoggedIn, isAuthor, validateRoad, catchAsync(roads.updateRoad))
+    .delete(isLoggedIn, isAuthor, catchAsync(roads.deleteRoad));
+
 
 router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(roads.renderEditForm));
 
-router.put('/:id', isLoggedIn, isAuthor, validateRoad, catchAsync(roads.updateRoad));
 
-router.delete('/:id', isLoggedIn, isAuthor, catchAsync(roads.deleteRoad));
 
 module.exports = router;
