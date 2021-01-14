@@ -3,7 +3,7 @@ const router = express.Router();
 const catchAsync = require('../utilities/catchAsync');
 const {isLoggedIn, validateRoad, isAuthor} = require('../middleware');
 const Road = require('../models/road');
-
+const Review = require('../models/review');
 
 
 
@@ -27,7 +27,12 @@ router.post('/', isLoggedIn, validateRoad, catchAsync(async(req, res, next) => {
 }));
 
 router.get('/:id', catchAsync(async (req, res) => {
-    const road = await Road.findById(req.params.id).populate('reviews').populate('author');
+    const road = await Road.findById(req.params.id).populate({
+        path:'reviews',
+        populate: {
+            path: 'author'
+        }
+    }).populate('author');
     console.log(road);
     if(!road){
         req.flash('error', 'Cannot find that road!');
@@ -57,7 +62,7 @@ router.put('/:id', isLoggedIn, isAuthor, validateRoad, catchAsync(async (req, re
 router.delete('/:id', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
     const { id } = req.params;
     await Road.findByIdAndDelete(id);
-    req.flash('success', 'Road Deleted');
+    req.flash('success', 'Road deleted');
     res.redirect('/Roads');
 }));
 

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Review = require('./review');
 //this helps shorten our code
 const Schema = mongoose.Schema;
 
@@ -19,5 +20,15 @@ const RoadSchema = new Schema({
         }
     ]
 });
+
+RoadSchema.post('findOneAndDelete', async function (doc) {
+    if(doc){
+        await Review.deleteMany({
+            _id: {
+                $in: doc.reviews
+            }
+        })
+    }
+})
 
 module.exports = mongoose.model('Road', RoadSchema);

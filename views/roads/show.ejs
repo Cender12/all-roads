@@ -26,8 +26,8 @@
             </div>
           </div>
     </div>
-          <div class="col-6">
-            <% if(currentUser) { %>
+    <div class="col-6">
+             <% if(currentUser) { %>
               <h2>Leave a Review</h2>
               <form action="/Roads/<%=road._id%>/reviews" method="POST" class="validated-form" novalidate>
                 <div class="mb-3">
@@ -43,6 +43,7 @@
               <% for(let review of road.reviews) { %>
                 <div class="card mb-3">
                   <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">By <%= review.author.username %></h6>
                     <p class="card-text">Review: <%= review.body %></p>
                     <form action="/Roads/<%=road._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
                       <button class=" btn btn-sm btn-danger">Delete</button>
@@ -50,7 +51,7 @@
                   </div>
                 </div>
               <% } %>
-          </div>
+    </div>
 </div>
 
    
