@@ -1,69 +1,25 @@
 const express = require('express');
 const router = express.Router();
+const roads = require('../controllers/roads')
 const catchAsync = require('../utilities/catchAsync');
 const {isLoggedIn, validateRoad, isAuthor} = require('../middleware');
 const Road = require('../models/road');
-const Review = require('../models/review');
 
 
 
 //ROUTES===============================================================
-router.get('/', catchAsync(async (req, res) => {
-   const roadCollection = await Road.find({});
-   res.render('roads/index', { roadCollection })
-}));
+router.get('/', catchAsync(roads.index)); //roads.index function is now located in ../controllers/roads.js
 
-router.get('/new', isLoggedIn, (req, res) => {
-    res.render('roads/new');
-});
+router.get('/new', isLoggedIn, roads.renderNewForm); //roads.renderNewForm function is now located in ../controllers/roads.js
 
-router.post('/', isLoggedIn, validateRoad, catchAsync(async(req, res, next) => {
-        // if(!req.body.road) throw new ExpressError('Invalid Road Data', 400);
-        const road = new Road (req.body.road);
-        road.author = req.user._id;
-        await road.save();
-        req.flash('success', 'Successfully made a new road');
-        res.redirect(`/Roads/${road._id}`) 
-}));
+router.post('/', isLoggedIn, validateRoad, catchAsync(roads.createRoad));
 
-router.get('/:id', catchAsync(async (req, res) => {
-    const road = await Road.findById(req.params.id).populate({
-        path:'reviews',
-        populate: {
-            path: 'author'
-        }
-    }).populate('author');
-    console.log(road);
-    if(!road){
-        req.flash('error', 'Cannot find that road!');
-        return res.redirect('/Roads');
-    }
-    res.render('roads/show', { road });
-}));
+router.get('/:id', catchAsync(roads.showRoad));
 
-router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const road = await Road.findById(id);
-    if(!road){
-        req.flash('error', 'Cannot find that road!');
-        return res.redirect('/Roads');
-    }
-    res.render('roads/edit', { road });
-}));
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(roads.renderEditForm));
 
-router.put('/:id', isLoggedIn, isAuthor, validateRoad, catchAsync(async (req, res) => {
-    const { id } = req.params;
-    
-    const road = await Road.findByIdAndUpdate(id, { ...req.body.road });
-    req.flash('success','Successfully updated road!');
-    res.redirect(`/Roads/${road._id}`);
-}));
+router.put('/:id', isLoggedIn, isAuthor, validateRoad, catchAsync(roads.updateRoad));
 
-router.delete('/:id', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
-    const { id } = req.params;
-    await Road.findByIdAndDelete(id);
-    req.flash('success', 'Road deleted');
-    res.redirect('/Roads');
-}));
+router.delete('/:id', isLoggedIn, isAuthor, catchAsync(roads.deleteRoad));
 
 module.exports = router;
