@@ -1,10 +1,11 @@
 const Road = require('../models/road');
 
 module.exports.index = async (req, res) => {
-    const roadCollection = await Road.find({});
+    const roadCollection = await Road.find({})
     res.render('roads/index', { roadCollection })
  }
 
+ 
  module.exports.renderNewForm = (req, res) => {
     res.render('roads/new');
 }
