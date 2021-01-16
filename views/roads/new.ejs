@@ -1,4 +1,7 @@
 <% layout('layouts/boilerplate')%>
+
+<link rel="stylesheet" href="/stylesheets/stars.css">
+
     <div class="row">
         <h1 class="text-center">New Road</h1>
         <div class="col-6 offset-3">
@@ -33,10 +36,24 @@
 
                 <!-- input rating -->
                 <div class="mb-3">
-                    <label class="form-label" for="rating">Road Rating</label>
+                    <!-- <label class="form-label" for="rating">Road Rating</label>
                     <div class="input-group">
                         <span class="input-group-text" id="rating-label"><i class="fas fa-star"></i></span>
-                        <input type="number" class="form-control" id="rating" placeholder="0-5" aria-label="Rating" aria-describedby="rating-label" name="road[rating]" required>
+                        <input type="number" class="form-control" id="rating" placeholder="0-5" aria-label="Rating" aria-describedby="rating-label" name="road[rating]" required> -->
+                          <fieldset class="starability-basic">
+                            <legend>Road Rating:</legend>
+                            <input type="radio" id="no-rate" class="input-no-rate" name="road[rating]" value="0" checked aria-label="No rating." />
+                            <input type="radio" id="second-rate1" name="road[rating]" value="1" />
+                            <label for="second-rate1" title="Terrible">1 star</label>
+                            <input type="radio" id="second-rate2" name="road[rating]" value="2" />
+                            <label for="second-rate2" title="Not good">2 stars</label>
+                            <input type="radio" id="second-rate3" name="road[rating]" value="3" />
+                            <label for="second-rate3" title="Average">3 stars</label>
+                            <input type="radio" id="second-rate4" name="road[rating]" value="4" />
+                            <label for="second-rate4" title="Very good">4 stars</label>
+                            <input type="radio" id="second-rate5" name="road[rating]" value="5" />
+                            <label for="second-rate5" title="Amazing">5 stars</label>
+                          </fieldset>
                         <div class="valid-feedback">
                             Looks good!
                         </div>
