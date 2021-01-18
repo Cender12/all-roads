@@ -14,11 +14,8 @@ const upload = multer({storage});
 
 router.route('/')
     .get(catchAsync(roads.index)) //roads.index function is now located in ../controllers/roads.js
-    // .post(isLoggedIn, validateRoad, catchAsync(roads.createRoad));
-    .post(upload.array('image'),(req, res) => {
-        console.log(req.body, req.files);
-        res.send('It worked')
-    });
+    .post(isLoggedIn, upload.array('image'), validateRoad, catchAsync(roads.createRoad));
+    
 
 router.get('/new', isLoggedIn, roads.renderNewForm); //roads.renderNewForm function is now located in ../controllers/roads.js
 

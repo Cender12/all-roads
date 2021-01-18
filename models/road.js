@@ -5,7 +5,12 @@ const Schema = mongoose.Schema;
 
 const RoadSchema = new Schema({
     title: String,
-    image: String,
+    images: [
+        {
+            url: String,
+            filename: String
+        }
+    ],
     rating: Number,
     description: String,
     location: String,

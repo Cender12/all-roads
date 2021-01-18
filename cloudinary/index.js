@@ -10,8 +10,10 @@ cloudinary.config({
 
 const storage = new CloudinaryStorage({
     cloudinary, 
-    folder: 'AllRoads',
-    allowedFormats: ['jpeg', 'png', 'jpg'] 
+    params: {
+        folder: 'AllRoads',
+        allowedFormats: ['jpeg', 'png', 'jpg'] 
+    }
 });
 
 module.exports = {

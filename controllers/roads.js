@@ -11,10 +11,11 @@ module.exports.index = async (req, res) => {
 }
 
 module.exports.createRoad = async(req, res, next) => {
-    // if(!req.body.road) throw new ExpressError('Invalid Road Data', 400);
     const road = new Road (req.body.road);
+    road.images = req.files.map(f => ({ url: f.path, filename: f.filename }))
     road.author = req.user._id;
     await road.save();
+    console.log(road);
     req.flash('success', 'Successfully made a new road');
     res.redirect(`/Roads/${road._id}`) 
 }
