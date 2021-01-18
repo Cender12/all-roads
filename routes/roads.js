@@ -4,6 +4,8 @@ const roads = require('../controllers/roads')
 const catchAsync = require('../utilities/catchAsync');
 const {isLoggedIn, validateRoad, isAuthor} = require('../middleware');
 const Road = require('../models/road');
+const multer  = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 
 
@@ -11,7 +13,11 @@ const Road = require('../models/road');
 
 router.route('/')
     .get(catchAsync(roads.index)) //roads.index function is now located in ../controllers/roads.js
-    .post(isLoggedIn, validateRoad, catchAsync(roads.createRoad));
+    // .post(isLoggedIn, validateRoad, catchAsync(roads.createRoad));
+    .post(upload.array('image'),(req, res) => {
+        console.log(req.body, req.files);
+        res.send('It worked')
+    });
 
 router.get('/new', isLoggedIn, roads.renderNewForm); //roads.renderNewForm function is now located in ../controllers/roads.js
 
