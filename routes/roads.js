@@ -5,7 +5,8 @@ const catchAsync = require('../utilities/catchAsync');
 const {isLoggedIn, validateRoad, isAuthor} = require('../middleware');
 const Road = require('../models/road');
 const multer  = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const {storage} = require('../cloudinary');
+const upload = multer({storage});
 
 
 
