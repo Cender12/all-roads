@@ -22,7 +22,7 @@ router.get('/new', isLoggedIn, roads.renderNewForm); //roads.renderNewForm funct
 
 router.route('/:id')
     .get(catchAsync(roads.showRoad))
-    .put(isLoggedIn, isAuthor, validateRoad, catchAsync(roads.updateRoad))
+    .put(isLoggedIn, isAuthor, upload.array('image'), validateRoad, catchAsync(roads.updateRoad))
     .delete(isLoggedIn, isAuthor, catchAsync(roads.deleteRoad));
 
 

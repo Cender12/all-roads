@@ -47,6 +47,9 @@ module.exports.renderEditForm = async (req, res) => {
 module.exports.updateRoad = async (req, res) => {
     const { id } = req.params;
     const road = await Road.findByIdAndUpdate(id, { ...req.body.road });
+    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    road.images.push(...imgs);
+    await road.save();
     req.flash('success','Successfully updated road!');
     res.redirect(`/Roads/${road._id}`);
 }
