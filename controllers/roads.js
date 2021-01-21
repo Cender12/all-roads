@@ -1,4 +1,7 @@
 const Road = require('../models/road');
+const { cloudinary } = require("../cloudinary");
+
+
 
 module.exports.index = async (req, res) => {
     const roadCollection = await Road.find({})
@@ -51,6 +54,13 @@ module.exports.updateRoad = async (req, res) => {
     const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
     road.images.push(...imgs);
     await road.save();
+    if (req.body.deleteImages) {
+        for (let filename of req.body.deleteImages) {
+            await cloudinary.uploader.destroy(filename);
+        }
+        await road.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages }}}})
+        console.log(road)
+    }
     req.flash('success','Successfully updated road!');
     res.redirect(`/Roads/${road._id}`);
 }
