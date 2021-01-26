@@ -2,8 +2,10 @@
 
 <link rel="stylesheet" href="/stylesheets/stars.css">
 
+
 <div class="row">
     <div class="col-6">
+      <div id='map' style='width: 400px; height: 300px;'></div>
       <div id="roadCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
           <% road.images.forEach((img, i) => { %>
@@ -79,4 +81,9 @@
     </div>
 </div>
 
-   
+<script>
+  const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+  const road = <%- JSON.stringify(road) %>
+</script>
+
+<script src="/javascripts/showPageMaps.js"></script>
