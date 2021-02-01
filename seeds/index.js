@@ -24,11 +24,16 @@ const seedDB = async () => {
         const random50 = Math.floor(Math.random() * 50);
         const rating = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
         const newCity = new Road({
+            //YOUR USER ID
             author: '5ff3c754585f7303e7067bed',
             location:       `${cities[random50].city}, ${cities[random50].state}`,
             title:          `${sample(descriptors)} ${sample(places)}`,
             description:    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
             rating,
+            geometry: { 
+                type: 'Point', 
+                coordinates: [ -118.807, 34.0058 ] 
+            },
             images: [ 
                 { 
                     url:
