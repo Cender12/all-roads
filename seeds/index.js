@@ -32,7 +32,10 @@ const seedDB = async () => {
             rating,
             geometry: { 
                 type: 'Point', 
-                coordinates: [ -118.807, 34.0058 ] 
+                coordinates: [
+                    cities[random50].longitude,
+                    cities[random50].latitude,
+                ] 
             },
             images: [ 
                 { 

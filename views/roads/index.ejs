@@ -1,5 +1,6 @@
 <% layout('layouts/boilerplate')%>
-    <h1>Road Collection</h1>
+<div id="map" style="width: 100%; height: 500px"></div>   
+<h1>Road Collection</h1>
     <div>
         <a href="/Roads/new">Add Road</a>
     </div>
@@ -29,3 +30,9 @@
             </div>
         <% }%>
 
+<script>
+    const mapToken = '<%-process.env.MAPBOX_TOKEN%>';     
+    const roadCollection = {features: <%- JSON.stringify(roadCollection) %>}
+</script>
+
+<script src="/javascripts/clusterMap.js"></script>
