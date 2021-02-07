@@ -35,11 +35,11 @@ paint: {
 'circle-color': [
 'step',
 ['get', 'point_count'],
-'#346beb',
+'#0BB4F3',
 3,
-'#6e34eb',
+'#0862E4',
 6,
-'#ae34eb'
+'#4B18D2'
 ],
 'circle-radius': [
 'step',

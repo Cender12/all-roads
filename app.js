@@ -98,9 +98,13 @@ app.use('/Roads/:id/reviews', reviewRoutes);
 
 
 // ERROR HANDLERS=========================================================================
-app.all('*', (req, res, next) => {
-    next(new ExpressError('Page Not Found'), 404)
-})
+// app.all('*', (req, res, next) => {
+//     next(new ExpressError('Page Not Found'), 404)
+// })
+
+app.get('/', (req, res) => {
+    res.render('home')
+});
 
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
