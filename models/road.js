@@ -13,6 +13,8 @@ ImageSchema.virtual('thumbnail').get(function() {
     return this.url.replace('/upload', '/upload/w_250');
 });
 
+const opts = { toJSON: { virtuals: true } };
+
 const RoadSchema = new Schema({
     title: String,
     images: [ImageSchema],
@@ -40,6 +42,11 @@ const RoadSchema = new Schema({
             ref: 'Review'
         }
     ]
+}, opts);
+
+RoadSchema.virtual('properties.popUpMarkup').get(function() {
+    return `<strong><a href="/Roads/${this._id}">${this.title}</a></strong>
+    <p>${this.description.substring(0,40)}...</p>`
 });
 
 RoadSchema.post('findOneAndDelete', async function (doc) {
