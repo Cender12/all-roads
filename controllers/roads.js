@@ -38,6 +38,7 @@ module.exports.showRoad = async (req, res) => {
             path: 'author'
         }
     }).populate('author');
+    console.log(road)
     if(!road){
         req.flash('error', 'Cannot find that road!');
         return res.redirect('/Roads');
