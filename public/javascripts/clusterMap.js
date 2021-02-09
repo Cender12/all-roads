@@ -3,7 +3,7 @@ const map = new mapboxgl.Map({
 container: 'cluster-map',
 style: 'mapbox://styles/mapbox/light-v10',
 center: [-103.59179687498357, 40.66995747013945],
-zoom: 3.4
+zoom: 3.2
 });
  
 //map controls
@@ -37,20 +37,20 @@ paint: {
 'circle-color': [
 'step',
 ['get', 'point_count'],
-'#0BB4F3',
+'#0B40F3',
 3,
-'#0862E4',
+'#0B9BF3',
 6,
-'#4B18D2'
+'#0BD3F3'
 ],
 'circle-radius': [
 'step',
 ['get', 'point_count'],
-20,
-10,
-30,
-30,
-40
+12,
+4,
+22,
+6,
+30
 ]
 }
 });
