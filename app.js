@@ -1,8 +1,8 @@
-if(process.env.NODE_ENV !== "production") {
-    require('dotenv').config();
-}
+// if(process.env.NODE_ENV !== "production") {
+//     require('dotenv').config();
+// }
 
-console.log(process.env.SECRET)
+require('dotenv').config();
 
 
 // REQUIRES===================================================================
@@ -20,6 +20,7 @@ const Review = require('./models/review');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
+const helmet = require('helmet');
 
 const mongoSanitize = require('express-mongo-sanitize');
 
@@ -56,11 +57,13 @@ app.use(mongoSanitize());
 
 // REMOVES DEPRICATION AND SPECIFIES COOKIE SETTINGS======================================
 const sessionConfig = {
+    name: 'session',
     secret: 'thisshouldbeabettersecret!',
     resave: false,
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
+        //secure: true,
         //ms to s to mins to hrs to days 
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7
@@ -72,6 +75,12 @@ const sessionConfig = {
 app.use(session(sessionConfig))
 app.use(flash());
 
+app.use(
+    helmet({
+      contentSecurityPolicy: false,
+    })
+  );
+  
 // PASSPORT AUTHENTICATION=================================================================
 //make sure session comes before(above)
 app.use(passport.initialize());
